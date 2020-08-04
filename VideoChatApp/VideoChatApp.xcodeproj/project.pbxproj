@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		587E209024D8C9060023C8A8 /* CameraSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 587E208F24D8C9060023C8A8 /* CameraSession.swift */; };
 		58A73EE724CF37F10076C9FB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A73EE624CF37F10076C9FB /* AppDelegate.swift */; };
 		58A73EE924CF37F10076C9FB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A73EE824CF37F10076C9FB /* SceneDelegate.swift */; };
 		58A73EEB24CF37F10076C9FB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58A73EEA24CF37F10076C9FB /* ViewController.swift */; };
@@ -22,6 +23,7 @@
 /* Begin PBXFileReference section */
 		02435FC3417C84DD5BCBEF95 /* Pods-VideoChatApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VideoChatApp.debug.xcconfig"; path = "Target Support Files/Pods-VideoChatApp/Pods-VideoChatApp.debug.xcconfig"; sourceTree = "<group>"; };
 		1ECB9FACF2928C960BD81883 /* Pods-VideoChatApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VideoChatApp.release.xcconfig"; path = "Target Support Files/Pods-VideoChatApp/Pods-VideoChatApp.release.xcconfig"; sourceTree = "<group>"; };
+		587E208F24D8C9060023C8A8 /* CameraSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraSession.swift; sourceTree = "<group>"; };
 		58A73EE324CF37F10076C9FB /* VideoChatApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VideoChatApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		58A73EE624CF37F10076C9FB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		58A73EE824CF37F10076C9FB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -56,6 +58,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		587E208E24D8C8EE0023C8A8 /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				587E208F24D8C9060023C8A8 /* CameraSession.swift */,
+			);
+			path = Camera;
+			sourceTree = "<group>";
+		};
 		58A73EDA24CF37F10076C9FB = {
 			isa = PBXGroup;
 			children = (
@@ -77,6 +87,7 @@
 		58A73EE524CF37F10076C9FB /* VideoChatApp */ = {
 			isa = PBXGroup;
 			children = (
+				587E208E24D8C8EE0023C8A8 /* Camera */,
 				58A73EFA24CF3B4E0076C9FB /* WebRTC */,
 				58A73EE624CF37F10076C9FB /* AppDelegate.swift */,
 				58A73EE824CF37F10076C9FB /* SceneDelegate.swift */,
@@ -227,6 +238,7 @@
 				58A73EEB24CF37F10076C9FB /* ViewController.swift in Sources */,
 				58A73EE724CF37F10076C9FB /* AppDelegate.swift in Sources */,
 				58A73EE924CF37F10076C9FB /* SceneDelegate.swift in Sources */,
+				587E209024D8C9060023C8A8 /* CameraSession.swift in Sources */,
 				58A73EFC24CF3B780076C9FB /* RTCFrameCapturer.swift in Sources */,
 				58A73F0024CF45380076C9FB /* WebRTCClient.swift in Sources */,
 			);
