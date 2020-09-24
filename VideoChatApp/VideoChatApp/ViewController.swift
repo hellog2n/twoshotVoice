@@ -11,7 +11,17 @@ import Starscream
 import WebRTC
 
 class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate, CameraSessionDelegate {
+    
+    
+    
+    
+    
+   
+    
 
+   
+    
+    
     @IBOutlet weak var webSocketStatusLabel: UILabel!
     
     @IBOutlet weak var webRTCStatusLabel: UILabel!
@@ -26,7 +36,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     // Mark: - Private Properties
       private var source: String?
       private var destination: String?
-      
+       var isConnected = false
       // Mark: - Public Properties
       var webRTCClient: WebRTCClient?
       var socket: WebSocket!
@@ -35,7 +45,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
       var useCustomCapturer: Bool = true
       
       // Mark: - Constants
-      let ipAddress: String = "18.228.43.69"
+      let ipAddress: String = "13.124.14.227"
       
       override func viewDidAppear(_ animated: Bool) {
         
@@ -73,14 +83,16 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
           self.cameraSession?.setupSession()
         }
         
+       let url = URL(string: "ws://" + ipAddress + ":50759/")
+      let urlRequest =  URLRequest(url: url!)
         
-        
-        socket = WebSocket(url: URL(string: "ws://" + ipAddress + ":8080/")!)
+    //    socket = WebSocket(url: URL(string: "ws://" + ipAddress + ":51090/")!)
+        socket = WebSocket(request: urlRequest)
         socket.delegate = self
         
         tryToConnectWebSocket = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true, block: { (timer) in
           if self.webRTCClient != nil {
-            if self.webRTCClient!.isConnected || self.socket.isConnected {
+            if self.webRTCClient!.isConnected  {
               return
             }
           }
@@ -97,23 +109,33 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         destinationNameTextField.addTarget(self, action: #selector(self.destinationNameDidChange(_:)), for: UIControl.Event.editingChanged)
         callButton.addTarget(self, action: #selector(self.callButtonTapped(_:)), for: .touchUpInside)
         
-        let tap  = UITapGestureRecognizer(target: self.scrollView, action: #selector(UIView.endEditing))
-        scrollView.addGestureRecognizer(tap)
+//        let tap  = UITapGestureRecognizer(target: self.scrollView, action: #selector(UIView.endEditing))
+//        scrollView.addGestureRecognizer(tap)
       }
       
       @objc func keyboardWillShow(notification:NSNotification){
-        let userInfo = notification.userInfo!
-        var keyboardFrame:CGRect = (userInfo[UIResponder.keyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
-        keyboardFrame = self.view.convert(keyboardFrame, from: nil)
-        
-        var contentInset:UIEdgeInsets = self.scrollView.contentInset
-        contentInset.bottom = keyboardFrame.size.height
-        scrollView.contentInset = contentInset
-      }
+//        let userInfo = notification.userInfo!
+//        var keyboardFrame:CGRect = (userInfo[UIResponder.keyboardFrameBeginUserInfoKey] as! NSValue).cgRectValue
+//        keyboardFrame = self.view.convert(keyboardFrame, from: nil)
+//
+//        var contentInset:UIEdgeInsets = self.scrollView.contentInset
+//        contentInset.bottom = keyboardFrame.size.height
+//        scrollView.contentInset = contentInset
+     }
       
+     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?){
+
+          self.view.endEditing(true)
+
+    }
+
+
+
+    
+//
       @objc func keyboardWillHide(notification:NSNotification){
         let contentInset:UIEdgeInsets = UIEdgeInsets.zero
-        scrollView.contentInset = contentInset
+     //   scrollView.contentInset = contentInset
       }
       
       @objc func sourceNameDidChange(_ textField: UITextField) {
@@ -164,7 +186,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         do {
           let data = try JSONEncoder().encode(signalingMessage)
           let message = String(data: data, encoding: String.Encoding.utf8)!
-          if self.socket.isConnected {
+          if self.isConnected {
             self.socket.write(string: message)
           }
         }catch{
@@ -179,8 +201,9 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
           let data = try JSONEncoder().encode(signalingMessage)
           let message = String(data: data, encoding: String.Encoding.utf8)!
           
-          if self.socket.isConnected {
+            if self.isConnected {
             self.socket.write(string: message)
+          
           }
         }catch{
           print(error)
@@ -190,14 +213,67 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
     }
 
     // MARK: - WebSocket Delegate
-    extension ViewController {
+extension ViewController {
+   
+    func didReceive(event: WebSocketEvent, client: WebSocket) {
+        switch(event) {
+                case .connected(let headers):
+                     isConnected = true
+                     websocketDidConnect(socket: client)
+                     
+                    print(".connected - \(headers)")
+                   case .disconnected(let reason, let code):
+                              isConnected = false
+                              websocketDidDisconnect(socket: client)
+                              print("websocket is disconnected: \(reason) with code: \(code)")
+            
+                          case .text(let string):
+                              print("Received text: \(string)")
+                            websocketDidReceiveMessage(socket: client, text: string)
+            
+                          case .binary(let data):
+                              print("Received data: \(data.count)")
+                          case .ping(_):
+                              break
+                          case .pong(_):
+                              break
+                          case .viabilityChanged(_):
+                              break
+                          case .reconnectSuggested(_):
+                              break
+                          case .cancelled:
+                              isConnected = false
+            
+                          case .error(let error):
+                              isConnected = false
+                              handleError(error)
+                  
+                }
+
+
+  
+    }
+    
+    
+    // 에러 체크
+    func handleError(_ error: Error?) {
+        if let e = error as? WSError {
+            print("websocket encountered an error: \(e.message)")
+        } else if let e = error {
+            print("websocket encountered an error: \(e.localizedDescription)")
+        } else {
+            print("websocket encountered an error")
+        }
+    }
+    
+    
       
       func websocketDidConnect(socket: WebSocketClient) {
         webSocketStatusLabel.text = "connected"
         webSocketStatusLabel.textColor = .green
       }
       
-      func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
+      func websocketDidDisconnect(socket: WebSocketClient) {
         webSocketStatusLabel.text = "disconnected"
         webSocketStatusLabel.textColor = .red
       }
@@ -229,7 +305,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         }
         
       }
-      
+     
       func websocketDidReceiveData(socket: WebSocketClient, data: Data) { }
     }
 
@@ -276,7 +352,8 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
       func didConnectWebRTC() {
         self.webRTCStatusLabel.textColor = .green
         // MARK: Disconnect websocket
-        self.socket.disconnect()
+     //   self.socket.disconnect()
+     //   self.socket.disconnect()
       }
       
       func didDisconnectWebRTC() {

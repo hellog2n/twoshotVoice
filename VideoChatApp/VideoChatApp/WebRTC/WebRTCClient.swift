@@ -27,6 +27,7 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
     private var peerConnectionFactory: RTCPeerConnectionFactory!
     private var peerConnection: RTCPeerConnection?
     private var videoCapturer: RTCVideoCapturer!
+    
     private var localVideoTrack: RTCVideoTrack!
     private var localAudioTrack: RTCAudioTrack!
     private var localRenderView: RTCEAGLVideoView?

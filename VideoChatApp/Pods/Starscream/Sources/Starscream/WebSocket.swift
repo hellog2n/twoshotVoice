@@ -135,6 +135,9 @@ open class WebSocket: WebSocketClient, EngineDelegate {
         engine.start(request: request)
     }
     
+   
+    
+    
     public func disconnect(closeCode: UInt16 = CloseCode.normal.rawValue) {
         engine.stop(closeCode: closeCode)
     }

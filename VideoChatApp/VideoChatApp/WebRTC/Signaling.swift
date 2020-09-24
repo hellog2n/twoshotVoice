@@ -13,7 +13,7 @@ struct SDP: Codable {
     let sdp: String
 }
 
-struct SignalMessage: Codable {
+struct SignalingMessage: Codable {
     let type: String
     let sessionDescription: SDP?
     let candidate: Candidate?
