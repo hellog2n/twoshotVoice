@@ -6,6 +6,6 @@ target 'VideoChatApp' do
   use_frameworks!
 
   # Pods for VideoChatApp
-	pod 'Starscream'
+	pod 'Starscream', '~> 4.0.3'
 	pod 'GoogleWebRTC'
 end

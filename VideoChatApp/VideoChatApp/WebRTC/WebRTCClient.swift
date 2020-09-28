@@ -30,9 +30,9 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
     
     private var localVideoTrack: RTCVideoTrack!
     private var localAudioTrack: RTCAudioTrack!
-    private var localRenderView: RTCEAGLVideoView?
+    private var localRenderView: RTCMTLVideoView?
     private var localView: UIView!
-    private var remoteRenderView: RTCEAGLVideoView?
+    private var remoteRenderView: RTCMTLVideoView?
     private var remoteView: UIView!
     private var remoteStream: RTCMediaStream?
     private var dataChannel: RTCDataChannel?
@@ -190,12 +190,12 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
       
       private func setupView(){
         // local
-        localRenderView = RTCEAGLVideoView()
+        localRenderView = RTCMTLVideoView()
         localRenderView!.delegate = self
         localView = UIView()
         localView.addSubview(localRenderView!)
         // remote
-        remoteRenderView = RTCEAGLVideoView()
+        remoteRenderView = RTCMTLVideoView()
         remoteRenderView?.delegate = self
         remoteView = UIView()
         remoteView.addSubview(remoteRenderView!)
@@ -430,7 +430,7 @@ class WebRTCClient: NSObject, RTCPeerConnectionDelegate, RTCVideoViewDelegate, R
     extension WebRTCClient{
       func videoView(_ videoView: RTCVideoRenderer, didChangeVideoSize size: CGSize) {
         let isLandScape = size.width < size.height
-        var renderView: RTCEAGLVideoView?
+        var renderView: RTCMTLVideoView?
         var parentView: UIView?
         if videoView.isEqual(localRenderView){
           renderView = localRenderView

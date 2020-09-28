@@ -45,7 +45,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
       var useCustomCapturer: Bool = true
       
       // Mark: - Constants
-      let ipAddress: String = "13.124.14.227"
+      let ipAddress: String = "3.34.46.224"
       
       override func viewDidAppear(_ animated: Bool) {
         
@@ -83,7 +83,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
           self.cameraSession?.setupSession()
         }
         
-       let url = URL(string: "ws://" + ipAddress + ":50759/")
+       let url = URL(string: "ws://" + ipAddress + ":58575/")
       let urlRequest =  URLRequest(url: url!)
         
     //    socket = WebSocket(url: URL(string: "ws://" + ipAddress + ":51090/")!)
@@ -186,7 +186,7 @@ class ViewController: UIViewController, WebSocketDelegate, WebRTCClientDelegate,
         do {
           let data = try JSONEncoder().encode(signalingMessage)
           let message = String(data: data, encoding: String.Encoding.utf8)!
-          if self.isConnected {
+            if self.isConnected {
             self.socket.write(string: message)
           }
         }catch{
@@ -352,7 +352,7 @@ extension ViewController {
       func didConnectWebRTC() {
         self.webRTCStatusLabel.textColor = .green
         // MARK: Disconnect websocket
-     //   self.socket.disconnect()
+       self.socket.disconnect()
      //   self.socket.disconnect()
       }
       
