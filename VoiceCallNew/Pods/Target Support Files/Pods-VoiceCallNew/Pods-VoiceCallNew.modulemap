@@ -1,0 +1,6 @@
+framework module Pods_VoiceCallNew {
+  umbrella header "Pods-VoiceCallNew-umbrella.h"
+
+  export *
+  module * { export * }
+}
